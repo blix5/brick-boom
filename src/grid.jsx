@@ -43,6 +43,40 @@ export function printGridTemp(grid) {
     )
 }
 
+export function registerBrickPlacement(grid, color) {
+    const binaryGrid = convertGridToBinary(grid);
+    let clearCount = 0;
+    const newGrid = grid.map((row, rowIndex) => {
+        if (binaryGrid[rowIndex].every(cell => cell === 1)) {
+            clearCount++;
+            return row.map(() => Cell.EMPTY);
+        }
+        return row;
+    });
+    for(let col = 0; col < binaryGrid[0].length; col++) {
+        var fullCol = true;
+        for(let row = 0; row < binaryGrid.length; row++) {
+            if(binaryGrid[row][col] === 0) {
+                fullCol = false;
+                break;
+            }
+        }
+        if(fullCol) {
+            clearCount++;
+            for(let row = 0; row < binaryGrid.length; row++) {
+                newGrid[row][col] = Cell.EMPTY;
+            }
+        }
+    }
+
+    return { grid: newGrid, count: clearCount };
+}
+
 export function convertGridToBinary(grid) {
     return grid.map(row => row.map(element => element === Cell.EMPTY ? 0 : 1));
+}
+
+export function isGridEmpty(grid) {
+    const binaryGrid = convertGridToBinary(grid);
+    return binaryGrid.every(row => row.every(cell => cell === 0));
 }

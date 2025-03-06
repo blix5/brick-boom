@@ -25,6 +25,34 @@ export function brickValidPlacement(oGrid, brickPos, brickType) {
     return true; // Valid placement
 };
 
+export function canFitAnyBrick(grid, brickTypes) {
+    for (const brickType of brickTypes) {
+        if (brickType === null) continue;
+        for (let row = 0; row < grid.length; row++) {
+            for (let col = 0; col < grid[0].length; col++) {
+                if (brickValidPlacement(grid, [row, col], brickType)) {
+                    return true; // Return true as soon as any brick can fit
+                }
+            }
+        }
+    }
+    return false; // Return false if no bricks can fit
+}
+
+export function findFirstFit(grid, brickTypes) {
+    for (const brickType of brickTypes) {
+        if (brickType === null) continue;
+        for (let row = 0; row < grid.length; row++) {
+            for (let col = 0; col < grid[0].length; col++) {
+                if (brickValidPlacement(grid, [row, col], brickType)) {
+                    return { row, col }; // Return coordinates of the first fit
+                }
+            }
+        }
+    }
+    return null; // Return null if no bricks can fit
+}
+
 export function placeBrick(grid, brickPos, brickType, color = Cell.RED) {
     if (!brickValidPlacement(grid, brickPos, brickType)) {
         return null; // Return original grid if placement is invalid
